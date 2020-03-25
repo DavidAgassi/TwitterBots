@@ -56,20 +56,17 @@ class MyStreamListener(tweepy.StreamListener):
         print(status_code)
 
 
-with open("NoBot/NoBotAuth.json", 'r') as fin:
-    auth_params = json.load(fin)
+with open("NoBot/NoBotSecrets.json", 'r') as fin:
+    secrets = json.load(fin)
 
 
 log("*****Starting NoBot*****")
 
-self_user_id = '1225872616868777990'
-self_screen_name = 'NoNooNoooNooNo'
-
-auth = tweepy.OAuthHandler(consumer_key=auth_params["consumer_key"], consumer_secret=auth_params["consumer_secret"])
-auth.set_access_token(auth_params["access_token"], auth_params["access_secret"])
+auth = tweepy.OAuthHandler(consumer_key=secrets["consumer_key"], consumer_secret=secrets["consumer_secret"])
+auth.set_access_token(secrets["access_token"], secrets["access_secret"])
 api = tweepy.API(auth)
 
-listener = MyStreamListener(self_user_id, self_screen_name, api)
+listener = MyStreamListener(secrets["self_user_id"], secrets["self_screen_name"], api)
 stream = tweepy.Stream(auth=api.auth, listener=listener)
 
 while True:
@@ -77,5 +74,5 @@ while True:
         hbout.write('heartbeat at: %s' % datetime.now())
     if not stream.running:
         log("Attempting to connect")
-        stream.filter(follow=[self_user_id], track=['@{}'.format(self_screen_name)], is_async=True)
+        stream.filter(follow=[secrets["self_user_id"]], track=['@{}'.format(secrets["self_screen_name"])], is_async=True)
     time.sleep(60)

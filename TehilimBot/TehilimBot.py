@@ -13,15 +13,17 @@ def log(l):
         lout.write("{}: {}\n".format(str(datetime.now()), str(l)))
 
 
+with open("TehilimBot/TehilimBotSecrets.json", 'r') as fin:
+    secrets = json.load(fin)
+
 DELAY_IN_SEC = 1800
 ERROR_DELAY = 60
-DESCRIPTION_TEMPLATE = "מצייץ תהילים להצלת עם ישראל. עכשיו בפרק {}'. בוט מאת @owl_fruit"
+DESCRIPTION_TEMPLATE = "מצייץ תהילים להצלת עם ישראל. עכשיו בפרק {}'. בוט מאת @%s" % (secrets["credit"])
 
 log("*****Starting TehilimBot*****")
 now = int(time.time())
 
-with open("TehilimBot/TehilimBotAuth.json", 'r') as fin:
-    auth_params = json.load(fin)
+
 with open("TehilimBot/parsed_tehilim.json", 'r') as fin:
     tehilim = json.load(fin)
 if os.path.isfile("TehilimBot/current_verse"):
@@ -44,8 +46,8 @@ else:
     chapter = 0
     verse = 0
 
-auth = tweepy.OAuthHandler(consumer_key=auth_params["consumer_key"], consumer_secret=auth_params["consumer_secret"])
-auth.set_access_token(auth_params["access_token"], auth_params["access_secret"])
+auth = tweepy.OAuthHandler(consumer_key=secrets["consumer_key"], consumer_secret=secrets["consumer_secret"])
+auth.set_access_token(secrets["access_token"], secrets["access_secret"])
 api = tweepy.API(auth)
 
 while True:
