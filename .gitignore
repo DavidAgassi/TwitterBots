@@ -4,3 +4,4 @@
 **/*.log
 /workspace.xml
 /RunBots.*
+**/*.exe
