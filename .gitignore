@@ -1,0 +1,6 @@
+/venv/
+/.idea/
+**/*Secrets.json
+**/*.log
+/workspace.xml
+/RunBots.*

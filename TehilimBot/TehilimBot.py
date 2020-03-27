@@ -9,7 +9,7 @@ from datetime import datetime
 
 
 def log(l):
-    with open("TehilimBot/log", 'a') as lout:
+    with open("TehilimBot/TehilimBot.log", 'a') as lout:
         lout.write("{}: {}\n".format(str(datetime.now()), str(l)))
 
 
@@ -26,12 +26,12 @@ now = int(time.time())
 
 with open("TehilimBot/parsed_tehilim.json", 'r') as fin:
     tehilim = json.load(fin)
-if os.path.isfile("TehilimBot/current_verse"):
-    with open("TehilimBot/current_verse", 'r') as fin:
-        current_s = fin.readline().split(",")
-        chapter = int(current_s[0])
-        verse = int(current_s[1])
-        last_post_time = int(current_s[2])
+if os.path.isfile(secrets["state_path"]):
+    with open(secrets["state_path"], 'r') as fin:
+        state = json.load(fin)
+        chapter = state["chapter"]
+        verse = state["verse"]
+        last_post_time = state["time"]
         log("Found recovering point!!!")
         time_diff = now - last_post_time
         log("time diff from last run is: {}sec.".format(str(time_diff)))
@@ -56,17 +56,19 @@ while True:
             api.update_profile(description=DESCRIPTION_TEMPLATE.format(tehilim[chapter]["chapter_heb_ind"]))
         api.update_status(tehilim[chapter]["verses"][verse]["verse_text"])
     except Exception as e:
-        print(e)
+        print("{}: ERROR - {} ".format(str(datetime.now()), str(e)))
         time.sleep(ERROR_DELAY)
     else:
+        with open("TehilimBot/heartbeat.log", 'w') as hbout:
+            hbout.write('heartbeat at: {}, posted chapter: {}, verse: {}.'.format(datetime.now(), str(chapter), str(verse)))
         verse = verse + 1
         if len(tehilim[chapter]["verses"]) == verse:
             verse = 0
             chapter = (chapter + 1) % 150
-        with open("TehilimBot/current_verse", 'w') as fout:
-            fout.writelines(",".join([
-                str(chapter),
-                str(verse),
-                str(int(time.time()))
-            ]))
+        with open(secrets["state_path"], 'w') as fout:
+            json.dump({
+                "chapter": chapter,
+                "verse": verse,
+                "time": int(time.time())
+            }, fout)
         time.sleep(DELAY_IN_SEC)

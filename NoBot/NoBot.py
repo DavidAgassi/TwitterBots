@@ -8,7 +8,7 @@ from datetime import datetime
 
 
 def log(l):
-    with open("NoBot/log", 'a') as lout:
+    with open("NoBot/NoBot.log", 'a') as lout:
         lout.write("{}: {}\n".format(str(datetime.now()), str(l)))
 
 
@@ -70,7 +70,7 @@ listener = MyStreamListener(secrets["self_user_id"], secrets["self_screen_name"]
 stream = tweepy.Stream(auth=api.auth, listener=listener)
 
 while True:
-    with open("NoBot/heartbeat", 'w') as hbout:
+    with open("NoBot/heartbeat.log", 'w') as hbout:
         hbout.write('heartbeat at: %s' % datetime.now())
     if not stream.running:
         log("Attempting to connect")
