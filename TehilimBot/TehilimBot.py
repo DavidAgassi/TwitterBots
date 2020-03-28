@@ -6,6 +6,7 @@ import json
 import os.path
 import time
 from datetime import datetime
+import sys
 
 
 def log(l):
@@ -16,6 +17,10 @@ def log(l):
 def get_time():
     return int((datetime.utcnow() - datetime(1970, 1, 1)).total_seconds())
 
+
+if len(sys.argv) > 1:
+    log("postponing run by {}s'".format(sys.argv[1]))
+    time.sleep(int(sys.argv[1]))
 
 with open("TehilimBot/TehilimBotSecrets.json", 'r') as fin:
     secrets = json.load(fin)
