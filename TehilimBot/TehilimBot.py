@@ -13,6 +13,10 @@ def log(l):
         lout.write("{}: {}\n".format(str(datetime.now()), str(l)))
 
 
+def get_time():
+    return int((datetime.utcnow() - datetime(1970, 1, 1)).total_seconds())
+
+
 with open("TehilimBot/TehilimBotSecrets.json", 'r') as fin:
     secrets = json.load(fin)
 
@@ -21,7 +25,7 @@ ERROR_DELAY = 60
 DESCRIPTION_TEMPLATE = "מצייץ תהילים להצלת עם ישראל. עכשיו בפרק {}'. בוט מאת @%s" % (secrets["credit"])
 
 log("*****Starting TehilimBot*****")
-now = int(time.time())
+now = get_time()
 
 
 with open("TehilimBot/parsed_tehilim.json", 'r') as fin:
@@ -69,6 +73,6 @@ while True:
             json.dump({
                 "chapter": chapter,
                 "verse": verse,
-                "time": int(time.time())
+                "time": get_time()
             }, fout)
         time.sleep(DELAY_IN_SEC)
