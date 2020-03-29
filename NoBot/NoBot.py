@@ -37,7 +37,7 @@ class MyStreamListener(tweepy.StreamListener):
         if status_in_reply_to_screen_name == self.screen_name:
             api.update_status('@{} {}'.format(status_author_screen_name, self.replay_text), status_id)
             return
-        if status.text.strip() == "@{} @{}".format(status_in_reply_to_screen_name, self_screen_name):
+        if status.text.strip() == "@{} @{}".format(status_in_reply_to_screen_name, secrets["self_screen_name"]):
             api.create_favorite(status_id)
             api.update_status('@{} {}'.format(status_in_reply_to_screen_name, self.replay_text), status_in_reply_to_status_id_str)
             return
