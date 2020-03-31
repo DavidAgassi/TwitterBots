@@ -19,7 +19,7 @@ def get_time():
 
 
 if len(sys.argv) > 1:
-    log("postponing run by {}s'".format(sys.argv[1]))
+    log("*****postponing run by {}s'*****".format(sys.argv[1]))
     time.sleep(int(sys.argv[1]))
 
 with open("TehilimBot/TehilimBotSecrets.json", 'r') as fin:
@@ -28,6 +28,7 @@ with open("TehilimBot/TehilimBotSecrets.json", 'r') as fin:
 DELAY_IN_SEC = 1800
 ERROR_DELAY = 60
 DESCRIPTION_TEMPLATE = "מצייץ תהילים להצלת עם ישראל. עכשיו בפרק {}'. בוט מאת @%s" % (secrets["credit"])
+VERSE_TEMPLATE = "{}\n~ {}', {}'"
 
 log("*****Starting TehilimBot*****")
 now = get_time()
@@ -63,9 +64,14 @@ while True:
     try:
         if verse == 0:
             api.update_profile(description=DESCRIPTION_TEMPLATE.format(tehilim[chapter]["chapter_heb_ind"]))
-        api.update_status(tehilim[chapter]["verses"][verse]["verse_text"])
+        api.update_status(VERSE_TEMPLATE.format(
+            tehilim[chapter]["verses"][verse]["verse_text"],
+            tehilim[chapter]["chapter_heb_ind"],
+            tehilim[chapter]["verses"][verse]["verse_heb_ind"]
+        ))
     except Exception as e:
         print("{}: ERROR - {} ".format(str(datetime.now()), str(e)))
+        log("{}: ERROR - {} ".format(str(datetime.now()), str(e)))
         time.sleep(ERROR_DELAY)
     else:
         with open("TehilimBot/heartbeat.log", 'w') as hbout:
