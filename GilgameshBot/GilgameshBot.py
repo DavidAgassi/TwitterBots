@@ -82,7 +82,7 @@ while True:
         line = line + 1
         if len(Gilgamesh[tablet]["lines"]) == line:
             line = 0
-            tablet = (tablet + 1) % 150
+            tablet = (tablet + 1) % 12
         with open(secrets["state_path"], 'w') as fout:
             json.dump({
                 "tablet": tablet,
