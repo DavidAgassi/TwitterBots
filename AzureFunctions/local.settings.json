@@ -1,0 +1,16 @@
+{
+  "IsEncrypted": false,
+  "Values": {
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+    "FUNCTIONS_WORKER_RUNTIME": "python",
+    "TEHILIM_CONSUMER_KEY": "",
+    "TEHILIM_CONSUMER_SECRET": "",
+    "TEHILIM_ACCESS_TOKEN": "",
+    "TEHILIM_ACCESS_TOKEN_SECRET": "",
+    "GILGAMESH_CONSUMER_KEY": "",
+    "GILGAMESH_CONSUMER_SECRET": "",
+    "GILGAMESH_ACCESS_TOKEN": "",
+    "GILGAMESH_ACCESS_TOKEN_SECRET": "",
+    "BLOB_CONNECTION_STRING": ""
+  }
+}
