@@ -1,7 +1,7 @@
+from logging import config
 import tweepy
 import json
 import logging
-import os
 from azure.storage.blob import BlobServiceClient
 
 class TwitterBot:
@@ -31,6 +31,13 @@ class TwitterBot:
             access_token=config['access_token'],
             access_token_secret=config['access_token_secret']
         )
+        auth = tweepy.OAuth1UserHandler(
+            config['consumer_key'],
+            config['consumer_secret'],
+            config['access_token'],
+            config['access_token_secret']
+        )
+        self.api_v1 = tweepy.API(auth)
 
         self.blob_service_client = BlobServiceClient.from_connection_string(config['blob_connection_string'])
         self.container_name = "bot-state"
@@ -94,7 +101,7 @@ class TwitterBot:
         if minor_idx == 0 and self.config.get('description_template'):
             try:
                 new_desc = self.config['description_template'].format(major_label)
-                self.client.update_me(description=new_desc)
+                self.api_v1.update_profile(description=new_desc)
                 logging.info(f"Updated profile description: {new_desc}")
             except Exception as e:
                 logging.error(f"Failed to update description: {e}")
