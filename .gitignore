@@ -5,3 +5,10 @@
 /workspace.xml
 /RunBots.*
 **/*.exe
+
+# Azure Functions
+local.settings.json
+.azure-functions/
+.python_packages/
+__pycache__/
+*.py[cod]

@@ -1,7 +1,7 @@
+from logging import config
 import tweepy
 import json
 import logging
-import os
 from azure.storage.blob import BlobServiceClient
 
 class TwitterBot:
@@ -31,9 +31,12 @@ class TwitterBot:
             access_token=config['access_token'],
             access_token_secret=config['access_token_secret']
         )
-        # Also need v1.1 for profile update (description)
-        auth = tweepy.OAuthHandler(config['consumer_key'], config['consumer_secret'])
-        auth.set_access_token(config['access_token'], config['access_token_secret'])
+        auth = tweepy.OAuth1UserHandler(
+            config['consumer_key'],
+            config['consumer_secret'],
+            config['access_token'],
+            config['access_token_secret']
+        )
         self.api_v1 = tweepy.API(auth)
 
         self.blob_service_client = BlobServiceClient.from_connection_string(config['blob_connection_string'])
@@ -49,7 +52,7 @@ class TwitterBot:
             container_client = self.blob_service_client.get_container_client(self.container_name)
             if not container_client.exists():
                 container_client.create_container()
-            
+
             blob_client = container_client.get_blob_client(self.blob_name)
             if blob_client.exists():
                 data = blob_client.download_blob().readall()
@@ -71,25 +74,20 @@ class TwitterBot:
         major_idx = state['major']
         minor_idx = state['minor']
 
-        # Wrap around logic
-        if major_idx >= len(content):
+        # Validate state - reset to beginning if corrupted
+        if (major_idx < 0 or major_idx >= len(content) or
+            minor_idx < 0 or minor_idx >= len(content[major_idx][self.config['minor_list_key']])):
+            logging.warning(f"Invalid state: major={major_idx}, minor={minor_idx}. Resetting to 0,0")
             major_idx = 0
             minor_idx = 0
 
         current_major = content[major_idx]
         minor_list = current_major[self.config['minor_list_key']]
 
-        if minor_idx >= len(minor_list):
-            # Should have been handled in previous step, but just in case
-            major_idx = (major_idx + 1) % len(content)
-            minor_idx = 0
-            current_major = content[major_idx]
-            minor_list = current_major[self.config['minor_list_key']]
-
         current_item = minor_list[minor_idx]
         text = current_item[self.config['text_key']]
         major_label = current_major[self.config['major_label_key']]
-        
+
         # Determine minor label
         if self.config.get('minor_label_key'):
             minor_label = current_item[self.config['minor_label_key']]
