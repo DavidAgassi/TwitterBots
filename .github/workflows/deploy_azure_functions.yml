@@ -2,7 +2,7 @@ name: Deploy Python project to Azure Function App
 
 on:
   push:
-    branches: ["main"]
+    branches: ["master"]
     paths:
       - 'AzureFunctions/**'
   workflow_dispatch:
