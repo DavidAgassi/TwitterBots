@@ -65,5 +65,10 @@ az functionapp config appsettings set --name $functionApp --resource-group $reso
 
 Write-Host "Infrastructure created successfully!"
 Write-Host "Function App Name: $functionApp"
-Write-Host "To deploy the code, run: func azure functionapp publish $functionApp"
+Write-Host "To deploy the code manually, run:"
+Write-Host "  cd ..\AzureFunctions"
+Write-Host "  func azure functionapp publish $functionApp"
+Write-Host ""
+Write-Host "Or push to main branch - GitHub Actions will deploy automatically."
+Write-Host ""
 Write-Host "IMPORTANT: Go to the Azure Portal and update the Twitter API keys in the Function App Configuration."
