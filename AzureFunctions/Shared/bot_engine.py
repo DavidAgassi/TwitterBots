@@ -51,26 +51,35 @@ class TwitterBot:
         try:
             container_client = self.blob_service_client.get_container_client(self.container_name)
             if not container_client.exists():
+                logging.info(f"Container '{self.container_name}' does not exist, creating it")
                 container_client.create_container()
 
             blob_client = container_client.get_blob_client(self.blob_name)
             if blob_client.exists():
                 data = blob_client.download_blob().readall()
-                return json.loads(data)
+                state = json.loads(data)
+                logging.info(f"Loaded state from blob '{self.blob_name}': major={state['major']}, minor={state['minor']}")
+                return state
+            else:
+                logging.info(f"Blob '{self.blob_name}' does not exist")
         except Exception as e:
             logging.warning(f"Error loading state: {e}")
-        return {"major": 0, "minor": 0}
+        return None
 
     def save_state(self, state):
         try:
             blob_client = self.blob_service_client.get_blob_client(container=self.container_name, blob=self.blob_name)
             blob_client.upload_blob(json.dumps(state), overwrite=True)
+            logging.info(f"Saved state to blob '{self.blob_name}': major={state['major']}, minor={state['minor']}")
         except Exception as e:
             logging.error(f"Error saving state: {e}")
 
-    def run(self):
-        content = self.load_json(self.config['content_file_path'])
-        state = self.get_state()
+    def validate_state(self, state, content):
+        """Validate and return a corrected state. Returns default state if invalid or None."""
+        if state is None:
+            logging.warning("State not found. Starting from beginning: major=0, minor=0")
+            return {"major": 0, "minor": 0}
+
         major_idx = state['major']
         minor_idx = state['minor']
 
@@ -78,8 +87,16 @@ class TwitterBot:
         if (major_idx < 0 or major_idx >= len(content) or
             minor_idx < 0 or minor_idx >= len(content[major_idx][self.config['minor_list_key']])):
             logging.warning(f"Invalid state: major={major_idx}, minor={minor_idx}. Resetting to 0,0")
-            major_idx = 0
-            minor_idx = 0
+            return {"major": 0, "minor": 0}
+
+        return state
+
+    def run(self):
+        content = self.load_json(self.config['content_file_path'])
+        state = self.get_state()
+        state = self.validate_state(state, content)
+        major_idx = state['major']
+        minor_idx = state['minor']
 
         current_major = content[major_idx]
         minor_list = current_major[self.config['minor_list_key']]
