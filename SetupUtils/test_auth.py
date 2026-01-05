@@ -3,7 +3,7 @@ import json
 import tweepy
 
 # Load environment variables from local.settings.json
-with open('../AzureFunctions/local.settings.json', 'r', encoding='utf-8') as f:
+with open('./AzureFunctions/local.settings.json', 'r', encoding='utf-8') as f:
     settings = json.load(f)
     for key, value in settings['Values'].items():
         os.environ[key] = value
@@ -36,3 +36,4 @@ def test_auth(bot_name, prefix):
 
 test_auth("TehilimBot", "TEHILIM")
 test_auth("GilgameshBot", "GILGAMESH")
+test_auth("DidBiBiQuitToday", "BIBI_QUIT")

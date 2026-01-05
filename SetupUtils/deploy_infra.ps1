@@ -58,8 +58,16 @@ $settings = @(
     "GILGAMESH_ACCESS_TOKEN_SECRET=PLACEHOLDER",
     "GILGAMESH_CREDIT_CREATOR=PLACEHOLDER",
     "GILGAMESH_CREDIT_INSPIRED=PLACEHOLDER",
+    "BIBI_QUIT_CONSUMER_KEY=PLACEHOLDER",
+    "BIBI_QUIT_CONSUMER_SECRET=PLACEHOLDER",
+    "BIBI_QUIT_ACCESS_TOKEN=PLACEHOLDER",
+    "BIBI_QUIT_ACCESS_TOKEN_SECRET=PLACEHOLDER",
+    "BIBI_QUIT_PHRASE=PLACEHOLDER",
+    "BIBI_QUIT_HOUR=23",
     "AzureWebJobs.TehilimTrigger.Disabled=1",
-    "AzureWebJobs.GilgameshTrigger.Disabled=1"
+    "AzureWebJobs.GilgameshTrigger.Disabled=1",
+    "AzureWebJobs.bibi_quit_time_trigger.Disabled=1",
+    "AzureWebJobs.bibi_quit_api_trigger.Disabled=1"
 )
 az functionapp config appsettings set --name $functionApp --resource-group $resourceGroup --settings $settings
 
