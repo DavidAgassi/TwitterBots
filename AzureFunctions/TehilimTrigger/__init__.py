@@ -23,6 +23,6 @@ def main(mytimer: func.TimerRequest) -> None:
         'template': "{}\n~ {}', {}'",
         'description_template': "מצייץ תהילים להצלת עם ישראל. עכשיו בפרק {}'. בוט מאת @%s" % (os.environ['TEHILIM_CREDIT_CREATOR'])
     }
-    
+
     bot = TwitterBot(config)
     bot.run()
