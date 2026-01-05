@@ -1,15 +1,10 @@
-name: Deploy v1 Bots (Tehilim & Gilgamesh)
+name: Deploy All Bots (v2 Model)
 
 on:
   push:
     branches: ["master"]
     paths:
-      - 'AzureFunctions/TehilimTrigger/**'
-      - 'AzureFunctions/GilgameshTrigger/**'
-      - 'AzureFunctions/Shared/bot_engine.py'
-      - 'AzureFunctions/Data/**'
-      - 'AzureFunctions/host.json'
-      - 'AzureFunctions/requirements.txt'
+      - 'AzureFunctions/**'
   workflow_dispatch:
 
 env:
