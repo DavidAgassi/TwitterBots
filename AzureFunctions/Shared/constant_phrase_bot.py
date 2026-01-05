@@ -234,7 +234,8 @@ class ConstantPhraseBot:
                     "success": True,
                     "message": f"Override scheduled for {date}",
                     "date": date,
-                    "phrase": phrase
+                    "phrase": phrase,
+                    "overrides": self.get_overrides()
                 }
             }
 
