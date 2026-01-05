@@ -82,5 +82,7 @@ jobs:
           app-name: 'func-twitterbots3237'
           slot-name: 'Production'
           package: '.'
+          enable-oryx-build: true
+          scm-do-build-during-deployment: true
 
           
