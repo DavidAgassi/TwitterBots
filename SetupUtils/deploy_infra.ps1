@@ -66,8 +66,8 @@ $settings = @(
     "BIBI_QUIT_HOUR=23",
     "AzureWebJobs.TehilimTrigger.Disabled=1",
     "AzureWebJobs.GilgameshTrigger.Disabled=1",
-    "AzureWebJobs.time_trigger.Disabled=1",
-    "AzureWebJobs.api_trigger.Disabled=1"
+    "AzureWebJobs.bibi_quit_time_trigger.Disabled=1",
+    "AzureWebJobs.bibi_quit_api_trigger.Disabled=1"
 )
 az functionapp config appsettings set --name $functionApp --resource-group $resourceGroup --settings $settings
 

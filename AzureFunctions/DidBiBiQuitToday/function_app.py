@@ -33,7 +33,7 @@ def _get_bot_config():
 
 # Timer Trigger - Runs at 20:00 and 21:00 UTC daily
 @app.timer_trigger(schedule="0 0 20,21 * * *", arg_name="mytimer", run_on_startup=False)
-def time_trigger(mytimer: func.TimerRequest) -> None:
+def bibi_quit_time_trigger(mytimer: func.TimerRequest) -> None:
     """Timer trigger that posts tweets at scheduled times"""
     logging.info('DidBiBiQuitToday timer trigger executed.')
 
@@ -44,7 +44,7 @@ def time_trigger(mytimer: func.TimerRequest) -> None:
 
 # HTTP Trigger - Management API
 @app.route(route="api/bibi", methods=["GET", "POST"], auth_level=func.AuthLevel.ANONYMOUS)
-def api_trigger(req: func.HttpRequest) -> func.HttpResponse:
+def bibi_quit_api_trigger(req: func.HttpRequest) -> func.HttpResponse:
     """HTTP API for managing overrides and kill switch"""
     logging.info('DidBiBiQuitToday API request received.')
 
