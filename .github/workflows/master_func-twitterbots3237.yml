@@ -67,13 +67,6 @@ jobs:
         run: |
           unzip release.zip
           rm release.zip
-        
-      - name: Login to Azure
-        uses: azure/login@v2
-        with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_69630D32B3C04AF389516FD7A3D7A82C }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_90FB66EBB8F5448D98B39FF922CF3EE4 }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_34F1914313C64CFB9EDEFD92FA9DA3A9 }}
 
       - name: 'Deploy to Azure Functions'
         uses: Azure/functions-action@v1
@@ -82,7 +75,5 @@ jobs:
           app-name: 'func-twitterbots3237'
           slot-name: 'Production'
           package: '.'
-          enable-oryx-build: true
+          publish-profile: ${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE }}
           scm-do-build-during-deployment: true
-
-          
