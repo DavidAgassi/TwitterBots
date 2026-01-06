@@ -1,3 +1,4 @@
 azure-functions
 tweepy
 azure-storage-blob
+tzdata
