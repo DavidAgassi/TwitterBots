@@ -4,7 +4,7 @@ import json
 import logging
 from azure.storage.blob import BlobServiceClient
 
-class TwitterBot:
+class SequentialContentBot:
     def __init__(self, config):
         """
         config: {
@@ -15,13 +15,13 @@ class TwitterBot:
             'blob_connection_string': str,
             'state_blob_name': str,
             'content_file_path': str,
-            'minor_list_key': str, # 'verses' or 'lines'
-            'text_key': str, # 'verse_text' or 'line_text'
-            'major_label_key': str, # 'chapter_heb_ind' or 'tablet_heb_ind'
-            'minor_label_key': str, # 'verse_heb_ind' or None (if using index lookup)
+            'minor_list_key': str, # JSON key for the list of items within a major unit
+            'text_key': str, # JSON key for the text content to post
+            'major_label_key': str, # JSON key for major unit label
+            'minor_label_key': str, # JSON key for minor unit label (or None to use custom numbering)
             'template': str,
             'description_template': str,
-            'heb_numbers_path': str # Optional, for Gilgamesh
+            'custom_numbers_path': str # Optional, path to custom numbering file
         }
         """
         self.config = config
@@ -108,9 +108,9 @@ class TwitterBot:
         # Determine minor label
         if self.config.get('minor_label_key'):
             minor_label = current_item[self.config['minor_label_key']]
-        elif self.config.get('heb_numbers_path'):
-            heb_numbers = self.load_json(self.config['heb_numbers_path'])
-            minor_label = heb_numbers[minor_idx]
+        elif self.config.get('custom_numbers_path'):
+            custom_numbers = self.load_json(self.config['custom_numbers_path'])
+            minor_label = custom_numbers[minor_idx]
         else:
             minor_label = str(minor_idx + 1)
 
