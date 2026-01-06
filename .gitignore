@@ -6,9 +6,13 @@
 /RunBots.*
 **/*.exe
 
+# IDE
+.vscode/
+
 # Azure Functions
 local.settings.json
 .azure-functions/
 .python_packages/
 __pycache__/
 *.py[cod]
+.venv/
