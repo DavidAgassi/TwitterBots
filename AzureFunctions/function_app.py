@@ -3,8 +3,8 @@ import json
 import os
 import datetime
 import azure.functions as func
-from Shared.sequential_content_bot import SequentialContentBot
-from Shared.constant_phrase_bot import ConstantPhraseBot
+from bot_engines.sequential_content_bot import SequentialContentBot
+from bot_engines.constant_phrase_bot import ConstantPhraseBot
 from zoneinfo import ZoneInfo
 
 # Initialize the function app
